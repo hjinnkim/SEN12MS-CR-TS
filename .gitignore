@@ -5,3 +5,6 @@
 */**/**/**/**/*.pyc
 
 ./__pycache__
+
+/statistics/
+/normalized_statistics/
