@@ -1,0 +1,3 @@
+SEN12MSCR/ROIs1868_summer_s1/s1_146/ROIs1868_summer_s1_146_p202.tif
+    - contains NaN value
+    - remove this file before you run
