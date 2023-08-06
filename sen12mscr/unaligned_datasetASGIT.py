@@ -81,6 +81,8 @@ class UnalignedDataset(BaseDataset):
             A_paths (str)    -- image paths
             B_paths (str)    -- image paths
         """
+        
+        index_A = index
         A, A_path = self.dataset_A[index]
         if self.opt.serial_batches:   # make sure index is within then range
             index_B = index % self.length
@@ -91,7 +93,7 @@ class UnalignedDataset(BaseDataset):
         A = self.transform_A(A)
         B = self.transform_B(B)
 
-        return {'A': A, 'B': B, 'A_paths': A_path, 'B_paths': B_path}
+        return {'A': A, 'B': B, 'A_paths': A_path, 'B_paths': B_path, 'ADX': index_A, 'BDX': index_B}
 
     def __len__(self):
         """Return the total number of images in the dataset.

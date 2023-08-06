@@ -1,0 +1,3 @@
+Inside the pix2pix_model.py, you need to change preprocess_input to return raw(from dataset) label image (EO image) because it changes the label to long type, and scatter to the tensor, which is change value of data.
+
+Just let it return original tensor.

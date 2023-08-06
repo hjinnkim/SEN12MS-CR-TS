@@ -330,7 +330,7 @@ class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
     
 class SEN12MSCR_B(SEN12MSCRBase, ABC): # A : SAR / B : EO
     def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', s1_rgb_composite='add', s1_transforms=None, s2_transforms=None, Lambda=None):
-        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, s1_rgb_composite=s1_rgb_composite, s1_transforms=None, s2_transforms=s2_transforms, Lambda=Lambda)
+        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, s1_rgb_composite=None, s1_transforms=None, s2_transforms=s2_transforms, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
 

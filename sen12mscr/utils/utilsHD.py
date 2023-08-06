@@ -1,7 +1,5 @@
 import random
 import numpy as np
-from argparse import Namespace
-
 import torch
 import torchvision.transforms as transforms
 from torchvision.transforms import InterpolationMode
@@ -60,36 +58,31 @@ def get_base_transforms(load_size: int=286, img_size: int=256, rescale_method='d
 # Pix2Pix, CycleGAN
 
 
-def get_transform(opt, params=None, grayscale=False, method=InterpolationMode.BICUBIC, use_hsv_aug=False, use_gray_aug=False, use_gaussian_blur=False, kernel_size=5, rescale_method='default'):
+def get_transform(opt, params=None,method=InterpolationMode.BICUBIC, use_hsv_aug=False, use_gray_aug=False, use_gaussian_blur=False, kernel_size=5, rescale_method='default'):
     transform_list = [
         transforms.Lambda(lambda img: torch.Tensor(img))
     ]
-    if grayscale:
-        transform_list.append(transforms.Grayscale(1))
-    if not opt.no_flip:
-        if params is None:
-            transform_list.append(transforms.RandomHorizontalFlip())
-        elif params['flip']:
-            transform_list.append(transforms.Lambda(
-                lambda img: __hflip(img, params['flip'])))
-    if 'resize' in opt.preprocess:
-        osize = [opt.load_size, opt.load_size]
-        transform_list.append(transforms.Resize(osize, method))
-    elif 'scale_width' in opt.preprocess:
+    if opt.isTrain and not opt.no_flip:
         transform_list.append(transforms.Lambda(
-            lambda img: __scale_width(img, opt.load_size, opt.crop_size, method)))
+                lambda img: __hflip(img, params['flip'])))
+    if 'resize' in opt.resize_or_crop:
+        osize = [opt.loadSize, opt.loadSize]
+        transform_list.append(transforms.Resize(osize, method))
+    elif 'scale_width' in opt.resize_or_crop:
+        transform_list.append(transforms.Lambda(
+            lambda img: __scale_width(img, opt.loadSize, method)))
 
-    if 'crop' in opt.preprocess:
-        if params is None:
-            transform_list.append(transforms.RandomCrop(opt.crop_size))
-        else:
-            transform_list.append(transforms.Lambda(
+    if 'crop' in opt.resize_or_crop:
+        transform_list.append(transforms.Lambda(
                 lambda img: __crop(img, params['crop_pos'], opt.crop_size)))
 
-    if opt.preprocess == 'none':
+    if opt.resize_or_crop == 'none':
+        base = float(2 ** opt.n_downsample_global)
+        if opt.netG == 'local':
+            base *= (2 ** opt.n_local_enhancers)
         transform_list.append(transforms.Lambda(
-            lambda img: __make_power_2(img, base=4, method=method)))
-        
+            lambda img: __make_power_2(img, base, method)))
+                
     if use_hsv_aug:
         transform_list.append(transforms.RandomApply([_color_jitter], p=0.8))
     if use_gray_aug:
@@ -107,19 +100,21 @@ def get_params(opt, size):
     w, h = size
     new_h = h
     new_w = w
-    if opt.preprocess == 'resize_and_crop':
-        new_h = new_w = opt.load_size
-    elif opt.preprocess == 'scale_width_and_crop':
-        new_w = opt.load_size
-        new_h = opt.load_size * h // w
+    if opt.resize_or_crop == 'resize_and_crop':
+        new_h = new_w = opt.loadSize
+    elif opt.resize_or_crop == 'scale_width_and_crop':
+        new_w = opt.loadSize
+        new_h = opt.loadSize * h // w
 
-    x = random.randint(0, np.maximum(0, new_w - opt.crop_size))
-    y = random.randint(0, np.maximum(0, new_h - opt.crop_size))
+    x = random.randint(0, np.maximum(0, new_w - opt.fineSize))
+    y = random.randint(0, np.maximum(0, new_h - opt.fineSize))
 
     flip = random.random() > 0.5
 
     return {'crop_pos': (x, y), 'flip': flip}
 
+def normalize():
+    return transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 
 def __make_power_2(img, base, method=InterpolationMode.BICUBIC):
     _, ow, oh = img.shape
@@ -132,12 +127,12 @@ def __make_power_2(img, base, method=InterpolationMode.BICUBIC):
     return F.resize(img, (w, h), method)
 
 
-def __scale_width(img, target_size, crop_size, method=InterpolationMode.BICUBIC):
+def __scale_width(img, target_size, method=InterpolationMode.BICUBIC):
     _, ow, oh = img.shape
-    if ow == target_size and oh >= crop_size:
+    if ow == target_size:
         return img
     w = target_size
-    h = int(max(target_size * oh / ow, crop_size))
+    h = int(target_size * oh / ow)
     return F.resize(img, (w, h), method)
 
 
@@ -155,6 +150,13 @@ def __hflip(img, flip):
         return F.hflip(img)
     return img
 
+
+def __vflip(img, flip):
+    if flip:
+        return F.vflip(img)
+    return img
+
+
 def __print_size_warning(ow, oh, w, h):
     """Print warning information about image size(only print once)"""
     if not hasattr(__print_size_warning, 'has_printed'):
@@ -163,10 +165,3 @@ def __print_size_warning(ow, oh, w, h):
               "(%d, %d). This adjustment will be done to all images "
               "whose sizes are not multiples of 4" % (ow, oh, w, h))
         __print_size_warning.has_printed = True
-
-
-def copyconf(default_opt, **kwargs):
-    conf = Namespace(**vars(default_opt))
-    for key in kwargs:
-        setattr(conf, key, kwargs[key])
-    return conf
