@@ -14,6 +14,8 @@ from torch.utils.data import Dataset
 
 ################SEN12MS-CR Stastics##################
 # SAR statistics
+S1_avg     = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
+S1_std     = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
 S1_lower_1 = 0
 S1_upper_1 = 0
 S1_avg_1   = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
@@ -24,6 +26,8 @@ S1_avg_2   = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
 S1_std_2   = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
 
 # EO statistics
+S2_avg     = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
+S2_std     = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
 S2_lower_1 = 0
 S2_upper_1 = 0
 S2_avg_1   = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
@@ -56,6 +60,9 @@ def process_MS(img, method):
         intensity_min, intensity_max = 0, 10000            # define a reasonable range of MS intensities
         img = np.clip(img, intensity_min, intensity_max)   # intensity clipping to a global unified MS intensity range
         img /= 2000                                        # project to [0,5], preserve global intensities (across patches)
+    if method=='norm':
+        img -= S2_avg                                      # Gaussian Normalize
+        img /= S2_std
     if method=='clip_1':
         intensity_min, intensity_max = 0, S2_upper_1       # all season train set EO upper 1% value
         img = np.clip(img, intensity_min, intensity_max)   # intensity clipping to a global unified MS intensity 
@@ -86,6 +93,9 @@ def process_SAR(img, method):
         dB_min, dB_max = [-25.0, -32.5], [0, 0]
         img = np.concatenate([(2 * (np.clip(img[0], dB_min[0], dB_max[0]) - dB_min[0]) / (dB_max[0] - dB_min[0]))[None, ...],
                               (2 * (np.clip(img[1], dB_min[1], dB_max[1]) - dB_min[1]) / (dB_max[1] - dB_min[1]))[None, ...]], axis=0)
+    if method=='norm':
+        img -= S1_avg
+        img /= S1_std
     if method=='clip_1':
         dB_min, dB_max = S1_lower_1, S1_upper_1            # all season train set SAR upper 1% value
         img = np.clip(img, dB_min, dB_max)                 # intensity clipping to a global unified SAR dB range
