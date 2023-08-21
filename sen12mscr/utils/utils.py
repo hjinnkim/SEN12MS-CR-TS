@@ -65,7 +65,7 @@ def get_transform(opt, params=None, grayscale=False, method=InterpolationMode.BI
         transforms.Lambda(lambda img: torch.Tensor(img))
     ]
     if grayscale:
-        transform_list.append(transforms.Grayscale(1))
+        transform_list.append(transforms.Grayscale(3))
     if not opt.no_flip:
         if params is None:
             transform_list.append(transforms.RandomHorizontalFlip())

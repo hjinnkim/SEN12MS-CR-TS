@@ -6,7 +6,7 @@ def get_all_data_loaders(opts):
     batch_size          = opts.batch_size
     num_workers         = opts.num_workers
     data_root           = opts.data_root
-    load_size           = opts.load_size
+    new_size            = opts.new_size
     crop_size           = opts.crop_size
     use_hsv_aug         = opts.use_hsv_aug
     use_gray_aug        = opts.use_gray_aug
@@ -16,9 +16,9 @@ def get_all_data_loaders(opts):
     s2_rescale_method   = opts.s2_rescale_method
     
     transforms_A_train, transforms_A_test = get_base_transforms(
-        load_size=load_size, img_size=crop_size, rescale_method=s1_rescale_method, use_hsv_aug=False, use_gray_aug=False, use_gaussian_blur=False, kernel_size=kernel_size)
+        load_size=new_size, img_size=crop_size, rescale_method=s1_rescale_method, use_hsv_aug=False, use_gray_aug=False, use_gaussian_blur=False, kernel_size=kernel_size)
     transforms_B_train, transforms_B_test = get_base_transforms(
-        load_size=load_size, img_size=crop_size, rescale_method=s2_rescale_method, use_hsv_aug=use_hsv_aug, use_gray_aug=use_gray_aug, use_gaussian_blur=use_gaussian_blur, kernel_size=kernel_size)
+        load_size=new_size, img_size=crop_size, rescale_method=s2_rescale_method, use_hsv_aug=use_hsv_aug, use_gray_aug=use_gray_aug, use_gaussian_blur=use_gaussian_blur, kernel_size=kernel_size)
     
     train_set_A = SEN12MSCR_A(data_root, split='train', season=opts.sen12mscr_season, s1_rescale_method=opts.s1_rescale_method,
                               s1_rgb_composite=opts.s1_rgb_composite, s1_transforms=transforms_A_train, Lambda=lambda_only_A)

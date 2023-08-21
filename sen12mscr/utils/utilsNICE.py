@@ -4,10 +4,9 @@ from torch.utils.data import DataLoader
 
 def get_all_data_loaders(opts):
     batch_size          = opts.batch_size
-    num_workers         = opts.num_workers
-    data_root           = opts.data_root
+    data_root           = opts.dataset
     load_size           = opts.load_size
-    crop_size           = opts.crop_size
+    crop_size           = opts.img_size
     use_hsv_aug         = opts.use_hsv_aug
     use_gray_aug        = opts.use_gray_aug
     use_gaussian_blur   = opts.gaussian_blur
@@ -34,12 +33,12 @@ def get_all_data_loaders(opts):
                              s2_rescale_method=opts.s2_rescale_method, s2_transforms=transforms_B_test, Lambda=lambda_B)
 
     train_loader_a = DataLoader(train_set_A, batch_size=batch_size,
-                                shuffle=True, pin_memory=True)
+                                shuffle=True, pin_memory=True, drop_last=True)
     train_loader_b = DataLoader(train_set_B, batch_size=batch_size,
-                                shuffle=True, pin_memory=True)
+                                shuffle=True, pin_memory=True, drop_last=True)
     test_loader_a = DataLoader(test_set_A, batch_size=batch_size,
-                               shuffle=False, pin_memory=True)
-    test_loader_b = DataLoader(train_set_A, batch_size=batch_size,
-                               shuffle=False, pin_memory=True)
+                               shuffle=False, pin_memory=True, drop_last=True)
+    test_loader_b = DataLoader(test_set_B, batch_size=batch_size,
+                               shuffle=False, pin_memory=True, drop_last=True)
 
     return train_loader_a, train_loader_b, test_loader_a, test_loader_b

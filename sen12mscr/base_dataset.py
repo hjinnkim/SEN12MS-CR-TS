@@ -14,28 +14,30 @@ from torch.utils.data import Dataset
 
 ################SEN12MS-CR Stastics##################
 # SAR statistics
-S1_avg     = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
-S1_std     = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
-S1_lower_1 = 0
-S1_upper_1 = 0
-S1_avg_1   = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
-S1_std_1   = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
-S1_lower_2 = 0
-S1_upper_2 = 0
-S1_avg_2   = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
-S1_std_2   = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
+# VV / VH
+S1_avg     = np.array([[[-11.384]], [[-18.121]]], dtype=np.float32)
+S1_std     = np.array([[[4.454]], [[4.933]]], dtype=np.float32)
+S1_lower_1 = -30.5
+S1_upper_1 = -3.0
+S1_avg_1   = np.array([[[-11.421]], [[-18.089]]], dtype=np.float32)
+S1_std_1   = np.array([[[4.359]], [[4.836]]], dtype=np.float32)
+S1_lower_2 = -29.0
+S1_upper_2 = -4.5
+S1_avg_2   = np.array([[[-11.465]], [[-18.054]]], dtype=np.float32)
+S1_std_2   = np.array([[[4.359]], [[4.836]]], dtype=np.float32)
 
 # EO statistics
-S2_avg     = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
-S2_std     = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
-S2_lower_1 = 0
-S2_upper_1 = 0
-S2_avg_1   = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
-S2_std_1   = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
-S2_lower_2 = 0
-S2_upper_2 = 0
-S2_avg_2   = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
-S2_std_2   = np.array([[[0]], [[0]], [[0]]], dtype=np.uint16)
+# B4 / B3 / B2
+S2_avg     = np.array([[[1028.]], [[1070.]], [[1167.]]], dtype=np.float32)
+S2_std     = np.array([[[753.941]], [[560.445]], [[541.149]]], dtype=np.float32)
+S2_lower_1 = 333
+S2_upper_1 = 3066
+S2_avg_1   = np.array([[[1004.]], [[1049.]], [[1143.]]], dtype=np.float32)
+S2_std_1   = np.array([[[609.625]], [[396.429]], [[324.487]]], dtype=np.float32)
+S2_lower_2 = 374
+S2_upper_2 = 2399
+S2_avg_2   = np.array([[[986.]], [[1044.]], [[1139.]]], dtype=np.float32)
+S2_std_2   = np.array([[[609.878]], [[396.461]], [[324.521]]], dtype=np.float32)
 #####################################################
 
 # utility functions used in the dataloaders of SEN12MS-CR and SEN12MS-CR-TS
@@ -117,13 +119,13 @@ def process_SAR(img, method):
     return img
 
 def S1_RGB_Composite(img, method):
-    if method=='add':
-        img = np.vstack((img[[0]], img[[1]], (img[[0]]+img[[1]])/2.0))
+    if method=='mean':
+        img = np.vstack((img[0], img[1], (img[0]+img[1])/2.0))
     
     return img
 
 class SEN12MSCRBase(Dataset, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', s1_rgb_composite='add', s1_transforms=None, s2_transforms=None, Lambda=None):
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', s1_rgb_composite='mean', s1_transforms=None, s2_transforms=None, Lambda=None):
 
         self.root_dir = root   # set root directory which contains all ROI
         self.region   = region # region according to which the ROI are selected # TODO: currently only supporting 'all'
@@ -222,7 +224,7 @@ class SEN12MSCRBase(Dataset, ABC): # A : SAR / B : EO
 
 
 class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', s1_rgb_composite='add', s1_transforms=None, s2_transforms=None, Lambda=None):
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', s1_rgb_composite='mean', s1_transforms=None, s2_transforms=None, Lambda=None):
         SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, s1_rgb_composite=s1_rgb_composite, s1_transforms=s1_transforms, s2_transforms=s2_transforms, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
@@ -286,7 +288,7 @@ class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
         return self.n_samples
     
 class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', s1_rgb_composite='add', s1_transforms=None, s2_transforms=None, Lambda=None):
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', s1_rgb_composite='mean', s1_transforms=None, s2_transforms=None, Lambda=None):
         SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, s1_rgb_composite=s1_rgb_composite, s1_transforms=s1_transforms, s2_transforms=None, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
@@ -339,7 +341,7 @@ class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
         return self.n_samples
     
 class SEN12MSCR_B(SEN12MSCRBase, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', s1_rgb_composite='add', s1_transforms=None, s2_transforms=None, Lambda=None):
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', s1_rgb_composite='mean', s1_transforms=None, s2_transforms=None, Lambda=None):
         SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, s1_rgb_composite=None, s1_transforms=None, s2_transforms=s2_transforms, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
