@@ -40,7 +40,7 @@ class BaseDataset(data.Dataset):
 
 
 def get_params(opt, size):
-    w, h = size
+    w, h = size, size
     new_h = h
     new_w = w
     if opt.preprocess_mode == 'resize_and_crop':
@@ -150,7 +150,7 @@ def __crop(img, pos, size):
     _, ow, oh = img.shape
     x1, y1 = pos
     tw = th = size
-    return F.crop(img, x1, y1, x1 + tw, y1 + th)
+    return F.crop(img, x1, y1, tw, th)
 
 
 def __flip(img, flip):

@@ -4,12 +4,12 @@ from torch.utils.data import DataLoader
 
 def get_all_data_loaders(opts):
     batch_size          = opts.batch_size
-    data_root           = opts.dataset
+    data_root           = opts.data_root
     load_size           = opts.load_size
     crop_size           = opts.img_size
     use_hsv_aug         = opts.use_hsv_aug
     use_gray_aug        = opts.use_gray_aug
-    use_gaussian_blur   = opts.gaussian_blur
+    use_gaussian_blur   = opts.use_gaussian_blur
     kernel_size         = opts.kernel_size    
     s1_rescale_method   = opts.s1_rescale_method
     s2_rescale_method   = opts.s2_rescale_method

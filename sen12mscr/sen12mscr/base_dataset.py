@@ -54,6 +54,9 @@ def rescale(img, oldMin, oldMax):
     return img
 
 def process_MS(img, method):
+    
+    # print('process_MS: ', method)
+    
     if method=='default':
         intensity_min, intensity_max = 0, 10000            # define a reasonable range of MS intensities
         img = np.clip(img, intensity_min, intensity_max)   # intensity clipping to a global unified MS intensity range
@@ -86,6 +89,9 @@ def process_MS(img, method):
     return img
 
 def process_SAR(img, method):
+    
+    # print('process_SAR: ', method)
+    
     if method=='default':
         dB_min, dB_max = -25, 0                            # define a reasonable range of SAR dB
         img = np.clip(img, dB_min, dB_max)                 # intensity clipping to a global unified SAR dB range
@@ -119,8 +125,11 @@ def process_SAR(img, method):
     return img
 
 def S1_RGB_Composite(img, method):
+    
+    # print('S1_RGB_Composite: ', method)
+    
     if method=='mean':
-        img = np.vstack((img[0], img[1], (img[0]+img[1])/2.0))
+        img = np.stack((img[0], img[1], (img[0]+img[1])/2.0), axis=0)
     
     return img
 
@@ -182,6 +191,20 @@ class SEN12MSCRBase(Dataset, ABC): # A : SAR / B : EO
         self.modalities     = ["S1", "S2"]
         self.s1_method         = s1_rescale_method
         self.s2_method         = s2_rescale_method
+    
+        print('#'*25)
+        print(self.root_dir)
+        print(self.region)
+        print(self.season)
+        print(self.s1_rgb_composite)
+        print(self.Lambda)
+        print(self.s1_transforms)
+        print(self.s2_transforms)
+        print(self.split)
+        print(self.s1_method)
+        print(self.s2_method)
+        print('#'*25)
+    
     
     def throw_warn(self):
         warnings.warn("""No data samples found! Please use the following directory structure:
@@ -264,8 +287,9 @@ class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
         s1              = process_SAR(read_img(s1_tif), self.s1_method)
         s1              = S1_RGB_Composite(s1, self.s1_rgb_composite) # Add dummy third channel #TODO Find RGB Composite
         s2              = read_img(s2_tif)[[3,2,1],:,:]
-        if self.transforms is not None:
-            s1 = self.transforms(s1)
+        if self.s1_transforms is not None:
+            s1 = self.s1_transforms(s1)
+        if self.s2_transforms is not None:
             s2 = self.transforms(s2)
         sample = {
                 'A': {
@@ -325,8 +349,8 @@ class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
         coord           = list(s1_tif.bounds)
         s1              = process_SAR(read_img(s1_tif), self.s1_method)
         s1              = S1_RGB_Composite(s1, self.s1_rgb_composite) # Add dummy third channel #TODO Find RGB Composite
-        if self.transforms is not None:
-            s1 = self.transforms(s1)
+        if self.s1_transforms is not None:
+            s1 = self.s1_transforms(s1)
         sample = {
                 'S1': s1,
                 'S1 path': os.path.join(self.root_dir, self.paths[pdx]['S1']),
@@ -377,8 +401,8 @@ class SEN12MSCR_B(SEN12MSCRBase, ABC): # A : SAR / B : EO
         s2_tif          = read_tif(os.path.join(self.root_dir, self.paths[pdx]['S2']))
         coord           = list(s2_tif.bounds)
         s2              = read_img(s2_tif)[[3,2,1],:,:]
-        if self.transforms is not None:
-            s2 = self.transforms(s2)
+        if self.s2_transforms is not None:
+            s2 = self.s2_transforms(s2)
         sample = {
                 'S2': process_MS(s2, self.s2_method),
                 'S2 path': os.path.join(self.root_dir, self.paths[pdx]['S2']),

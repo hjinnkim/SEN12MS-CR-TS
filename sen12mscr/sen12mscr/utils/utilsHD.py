@@ -74,7 +74,7 @@ def get_transform(opt, params=None,method=InterpolationMode.BICUBIC, use_hsv_aug
 
     if 'crop' in opt.resize_or_crop:
         transform_list.append(transforms.Lambda(
-                lambda img: __crop(img, params['crop_pos'], opt.crop_size)))
+                lambda img: __crop(img, params['crop_pos'], opt.fineSize)))
 
     if opt.resize_or_crop == 'none':
         base = float(2 ** opt.n_downsample_global)
@@ -97,7 +97,7 @@ def get_transform(opt, params=None,method=InterpolationMode.BICUBIC, use_hsv_aug
     return transforms.Compose(transform_list)
 
 def get_params(opt, size):
-    w, h = size
+    w, h = size, size
     new_h = h
     new_w = w
     if opt.resize_or_crop == 'resize_and_crop':
@@ -141,7 +141,7 @@ def __crop(img, pos, size):
     x1, y1 = pos
     tw = th = size
     if (ow > tw or oh > th):
-        return F.crop(img, x1, y1, x1 + tw, y1 + th)
+        return F.crop(img, x1, y1, tw, th)
     return img
 
 

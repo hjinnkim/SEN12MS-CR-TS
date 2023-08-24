@@ -2,8 +2,8 @@
 Copyright (C) 2019 NVIDIA Corporation.  All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
-
-from sen12mscr.utils.base_datasetSPADE import BaseDataset, get_params, get_transform, lambda_AB
+from data.base_dataset import BaseDataset
+from sen12mscr.utils.base_datasetSPADE import get_params, get_transform, lambda_AB
 from sen12mscr.base_dataset import SEN12MSCR_AB
 from torchvision.transforms import InterpolationMode
 from PIL import Image
@@ -14,7 +14,7 @@ def modify_commandline_options(parser, is_train):
                         help='If specified, skip sanity check of correct label-image file pairing')
     return parser
 
-class AlignedDatasetSPADE(BaseDataset):
+class AlignedSPADEDataset(BaseDataset):
     @staticmethod
     def modify_commandline_options(parser, is_train):
         parser = modify_commandline_options(parser, is_train)

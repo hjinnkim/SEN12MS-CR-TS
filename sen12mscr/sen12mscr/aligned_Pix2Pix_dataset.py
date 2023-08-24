@@ -1,9 +1,9 @@
+from data.base_dataset import BaseDataset
 from sen12mscr.base_dataset import SEN12MSCR_AB
-from sen12mscr.utils.base_dataset import BaseDataset
 from sen12mscr.utils.utils import get_params, get_transform, lambda_AB
 
 
-class AlignedDataset(BaseDataset):
+class AlignedPix2PixDataset(BaseDataset):
     """A dataset class for paired image dataset."""
 
     """
@@ -75,7 +75,7 @@ class AlignedDataset(BaseDataset):
         # apply the same transform to both A and B
         transform_params = get_params(self.opt, self.load_size)
         A_transform = get_transform(self.opt, transform_params, grayscale=(self.input_nc == 1), use_hsv_aug=False, use_gray_aug=False, use_gaussian_blur=False, rescale_method=self.opt.s1_rescale_method)
-        B_transform = get_transform(self.opt, transform_params, grayscale=(self.output_nc == 1), use_hsv_aug=self.opt.use_hsv_aug, use_gray_aug=self.opt.use_gray_aug, use_gaussian_blur=self.use_gaussian_blur, kernel_size=self.opts.kernel_size, rescale_method=self.opt.s2_rescale_method)
+        B_transform = get_transform(self.opt, transform_params, grayscale=(self.output_nc == 1), use_hsv_aug=self.opt.use_hsv_aug, use_gray_aug=self.opt.use_gray_aug, use_gaussian_blur=self.opt.use_gaussian_blur, kernel_size=self.opts.kernel_size, rescale_method=self.opt.s2_rescale_method)
 
         A = A_transform(A)
         B = B_transform(B)

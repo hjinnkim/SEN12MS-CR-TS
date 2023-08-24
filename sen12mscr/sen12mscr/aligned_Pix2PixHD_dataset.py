@@ -1,9 +1,9 @@
+from data.base_dataset import BaseDataset
 from sen12mscr.base_dataset import SEN12MSCR_AB
-from sen12mscr.utils.base_datasetHD import BaseDataset
 from sen12mscr.utils.utilsHD import get_params, get_transform, lambda_AB
 
 
-class AlignedDatasetHD(BaseDataset):
+class AlignedPix2PixHDDataset(BaseDataset):
     """A dataset class for paired image dataset."""
 
     """

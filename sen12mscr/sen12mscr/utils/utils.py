@@ -62,7 +62,7 @@ def get_base_transforms(load_size: int=286, img_size: int=256, rescale_method='d
 
 def get_transform(opt, params=None, grayscale=False, method=InterpolationMode.BICUBIC, use_hsv_aug=False, use_gray_aug=False, use_gaussian_blur=False, kernel_size=5, rescale_method='default'):
     transform_list = [
-        transforms.Lambda(lambda img: torch.Tensor(img))
+        transforms.Lambda(lambda img: torch.Tensor(img)[None, :])
     ]
     if grayscale:
         transform_list.append(transforms.Grayscale(3))
@@ -75,6 +75,10 @@ def get_transform(opt, params=None, grayscale=False, method=InterpolationMode.BI
     if 'resize' in opt.preprocess:
         osize = [opt.load_size, opt.load_size]
         transform_list.append(transforms.Resize(osize, method))
+        # if rescale_method == 'default' or 'clip' in rescale_method:
+        #     transform_list.append(transforms.Lambda(lambda img: (img-img.min())/(img.max()-img.min())))
+        
+        
     elif 'scale_width' in opt.preprocess:
         transform_list.append(transforms.Lambda(
             lambda img: __scale_width(img, opt.load_size, opt.crop_size, method)))
@@ -100,11 +104,13 @@ def get_transform(opt, params=None, grayscale=False, method=InterpolationMode.BI
     if rescale_method == 'default' or 'clip' in rescale_method:
         transform_list.append(transforms.Normalize(
             mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)))
-
+    transform_list.append(transforms.Lambda(lambda img: img.squeeze()))
+    
+    
     return transforms.Compose(transform_list)
 
 def get_params(opt, size):
-    w, h = size
+    w, h = size, size
     new_h = h
     new_w = w
     if opt.preprocess == 'resize_and_crop':
@@ -122,7 +128,7 @@ def get_params(opt, size):
 
 
 def __make_power_2(img, base, method=InterpolationMode.BICUBIC):
-    _, ow, oh = img.shape
+    _, _, ow, oh = img.shape
     h = int(round(oh / base) * base)
     w = int(round(ow / base) * base)
     if h == oh and w == ow:
@@ -133,7 +139,7 @@ def __make_power_2(img, base, method=InterpolationMode.BICUBIC):
 
 
 def __scale_width(img, target_size, crop_size, method=InterpolationMode.BICUBIC):
-    _, ow, oh = img.shape
+    _, _, ow, oh = img.shape
     if ow == target_size and oh >= crop_size:
         return img
     w = target_size
@@ -142,11 +148,11 @@ def __scale_width(img, target_size, crop_size, method=InterpolationMode.BICUBIC)
 
 
 def __crop(img, pos, size):
-    _, ow, oh = img.shape
+    _, _, ow, oh = img.shape
     x1, y1 = pos
     tw = th = size
     if (ow > tw or oh > th):
-        return F.crop(img, x1, y1, x1 + tw, y1 + th)
+        return F.crop(img, x1, y1, tw, th)
     return img
 
 

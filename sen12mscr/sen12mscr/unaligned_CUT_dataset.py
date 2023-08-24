@@ -1,9 +1,9 @@
+from data.base_dataset import BaseDataset
 from sen12mscr.base_dataset import SEN12MSCR_A, SEN12MSCR_B
-from sen12mscr.utils.base_dataset import BaseDataset
-from sen12mscr.utils.utils import get_transform, lambda_A, lambda_B
+from sen12mscr.utils.utils import get_transform, copyconf, lambda_A, lambda_B
 import random
 
-class UnalignedDataset(BaseDataset):
+class UnalignedDatasetCUT(BaseDataset):
     """
     This dataset class can load unaligned/unpaired datasets.
     """
@@ -54,21 +54,14 @@ class UnalignedDataset(BaseDataset):
         # s1_transforms       = opt.s1_transforms
         # s2_transforms       = opt.s2_transforms
         btoA = self.opt.direction == 'BtoA'
-        
-        input_nc = self.opt.output_nc if btoA else self.opt.input_nc       # get the number of channels of input image
-        output_nc = self.opt.input_nc if btoA else self.opt.output_nc      # get the number of channels of output image
-        
+                
         self.dataset_A = SEN12MSCR_A(dataroot, split=split, season=season, s1_rescale_method=s1_rescale_method,
                                      s2_rescale_method=s2_rescale_method, s1_rgb_composite=s1_rgb_composite, Lambda=lambda_A)
         self.dataset_B = SEN12MSCR_B(dataroot, split=split, season=season, s1_rescale_method=s1_rescale_method,
                                      s2_rescale_method=s2_rescale_method, s1_rgb_composite=s1_rgb_composite, Lambda=lambda_B)
         
-        self.transform_A = get_transform(self.opt, grayscale=(input_nc == 1), use_hsv_aug=False,
-                                         use_gray_aug=False, use_gaussian_blur=False, rescale_method=self.opt.s1_rescale_method)
-        self.transform_B = get_transform(self.opt, grayscale=(
-            output_nc == 1), use_hsv_aug=self.opt.use_hsv_aug, use_gray_aug=self.opt.use_gray_aug, use_gaussian_blur=self.use_gaussian_blur, kernel_size=self.opt.kernel_size, rescale_method=self.opt.s2_rescale_method)
         self.length = len(self.dataset_B)
-
+        
     def __getitem__(self, index):
         """Return a data point and its metadata information.
 
@@ -87,9 +80,24 @@ class UnalignedDataset(BaseDataset):
         else:   # randomize the index for domain B to avoid fixed pairs.
             index_B = random.randint(0, self.length - 1)
         B, B_path = self.dataset_B[index_B]
-        # apply image transformation
-        A = self.transform_A(A)
-        B = self.transform_B(B)
+        
+        # Apply image transformation
+        # For FastCUT mode, if in finetuning phase (learning rate is decaying),
+        # do not perform resize-crop data augmentation of CycleGAN.
+#       print('current_epoch', self.current_epoch)
+        is_finetuning = self.opt.isTrain and self.current_epoch > self.opt.n_epochs
+        if self.opt.isTrain and self.current_epoch == self.opt.n_epochs + 1:
+            print("entering finetuning phase")
+        modified_opt = copyconf(
+            self.opt, load_size=self.opt.crop_size if is_finetuning else self.opt.load_size)
+        
+        transform_A = get_transform(modified_opt, use_hsv_aug=False, use_gray_aug=False,
+                                    use_gaussian_blur=False, rescale_method=self.opt.s1_rescale_method)
+        transform_B = get_transform(modified_opt, use_hsv_aug=self.opt.use_hsv_aug, use_gray_aug=self.opt.use_gray_aug,
+                                    use_gaussian_blur=self.use_gaussian_blur, kernel_size=self.opt.kernel_size, rescale_method=self.opt.s2_rescale_method)
+        
+        A = transform_A(A)
+        B = transform_B(B)
 
         return {'A': A, 'B': B, 'A_paths': A_path, 'B_paths': B_path}
 

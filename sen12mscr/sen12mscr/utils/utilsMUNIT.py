@@ -10,7 +10,7 @@ def get_all_data_loaders(opts):
     crop_size           = opts.crop_size
     use_hsv_aug         = opts.use_hsv_aug
     use_gray_aug        = opts.use_gray_aug
-    use_gaussian_blur   = opts.gaussian_blur
+    use_gaussian_blur   = opts.use_gaussian_blur
     kernel_size         = opts.kernel_size    
     s1_rescale_method   = opts.s1_rescale_method
     s2_rescale_method   = opts.s2_rescale_method
