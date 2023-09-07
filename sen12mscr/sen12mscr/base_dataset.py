@@ -14,30 +14,121 @@ from torch.utils.data import Dataset
 
 ################SEN12MS-CR Stastics##################
 # SAR statistics
-# VV / VH
-S1_avg     = np.array([[[-11.384]], [[-18.121]]], dtype=np.float32)
-S1_std     = np.array([[[4.454]], [[4.933]]], dtype=np.float32)
-S1_lower_1 = -30.5
-S1_upper_1 = -3.0
-S1_avg_1   = np.array([[[-11.421]], [[-18.089]]], dtype=np.float32)
-S1_std_1   = np.array([[[4.359]], [[4.836]]], dtype=np.float32)
-S1_lower_2 = -29.0
-S1_upper_2 = -4.5
-S1_avg_2   = np.array([[[-11.465]], [[-18.054]]], dtype=np.float32)
-S1_std_2   = np.array([[[4.359]], [[4.836]]], dtype=np.float32)
+# VV / VH / (VV/VH) or (VV+VH)/2
+S1_min      = {
+    'add'   : {
+        0.0: np.array([[[-25.0]], [[-25.0]], [[-25.0]]], dtype=np.float32),
+        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+    },
+    'div'   : {
+        0.0: np.array([[[-25.0]], [[-25.0]], [[0.0]]], dtype=np.float32),
+        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+    }
+}
+S1_max      = {
+    'add'   : {
+        0.0: np.array([[[0.0]], [[0.0]], [[0.0]]], dtype=np.float32),
+        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+    },
+    'div'   : {
+        0.0: np.array([[[0.0]], [[0.0]], [[2.0]]], dtype=np.float32),
+        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+    }
+}
+S1_avg      = {
+    True:{
+        'add'   : {
+            0.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        },
+        'div'   : {
+            0.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        }
+    }, 
+    False:{
+        'add'   : {
+            0.0: np.array([[[-11.3838]], [[-18.1206]], [[-14.7522]]], dtype=np.float32),
+            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        },
+        'div'   : {
+            0.0: np.array([[[-11.3838]], [[-18.1206]], [[]]], dtype=np.float32),
+            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        }
+    }
+}
+S1_std      = {
+    True:{
+        'add'   : {
+            0.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        },
+        'div'   : {
+            0.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        }
+    }, 
+    False:{
+        'add'   : {
+            0.0: np.array([[[4.4542]], [[4.9335]], [[4.4379]]], dtype=np.float32),
+            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        },
+        'div'   : {
+            0.0: np.array([[[4.4542]], [[4.9335]], [[]]], dtype=np.float32),
+            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        }
+    }
+}
 
 # EO statistics
 # B4 / B3 / B2
-S2_avg     = np.array([[[1028.]], [[1070.]], [[1167.]]], dtype=np.float32)
-S2_std     = np.array([[[753.941]], [[560.445]], [[541.149]]], dtype=np.float32)
-S2_lower_1 = 333
-S2_upper_1 = 3066
-S2_avg_1   = np.array([[[1004.]], [[1049.]], [[1143.]]], dtype=np.float32)
-S2_std_1   = np.array([[[609.625]], [[396.429]], [[324.487]]], dtype=np.float32)
-S2_lower_2 = 374
-S2_upper_2 = 2399
-S2_avg_2   = np.array([[[986.]], [[1044.]], [[1139.]]], dtype=np.float32)
-S2_std_2   = np.array([[[609.878]], [[396.461]], [[324.521]]], dtype=np.float32)
+S2_min      = { 
+    0.0: np.array([[[0.0]], [[0.0]], [[0.0]]], dtype=np.float32),
+    1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+    2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+}
+S2_max      = { 
+    0.0: np.array([[[4000]], [[4000]], [[4000]]], dtype=np.float32),
+    1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+    2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+}
+S2_avg      = {
+    True:{
+        0.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+    }, 
+    False:{
+        0.0: np.array([[[1028.1276]], [[1069.8891]], [[1167.1272]]], dtype=np.float32),
+        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+    }, 
+}
+S2_std      = {
+    True:{
+        0.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+    }, 
+    False:{
+        0.0: np.array([[[753.9400]], [[560.4429]], [[541.1479]]], dtype=np.float32),
+        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
+        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+    }, 
+}
+
 #####################################################
 
 # utility functions used in the dataloaders of SEN12MS-CR and SEN12MS-CR-TS
@@ -46,17 +137,19 @@ def read_tif(path_IMG):
     return tif
 
 def read_img(tif):
-    return tif.read().astype(np.float32)
+    return np.nan_to_num(tif.read().astype(np.float32))
 
 def rescale(img, oldMin, oldMax):
     oldRange = oldMax - oldMin
     img      = (img - oldMin) / oldRange
     return img
 
-def process_MS(img, method):
-    
-    # print('process_MS: ', method)
-    
+def cut_percent(img, percent):
+    cut_value = np.percentile(img, [percent, 100.-percent], axis=(1,2), interpolation='nearest')
+    img = np.clip(img, cut_value[0][:, None, None], cut_value[1][:, None, None])
+    return img
+
+def process_MS(img, method, percent=0.0, per_image=False):
     if method=='default':
         intensity_min, intensity_max = 0, 10000            # define a reasonable range of MS intensities
         img = np.clip(img, intensity_min, intensity_max)   # intensity clipping to a global unified MS intensity range
@@ -65,33 +158,32 @@ def process_MS(img, method):
         intensity_min, intensity_max = 0, 10000            # define a reasonable range of MS intensities
         img = np.clip(img, intensity_min, intensity_max)   # intensity clipping to a global unified MS intensity range
         img /= 2000                                        # project to [0,5], preserve global intensities (across patches)
+    if method=='base':
+        img = np.clip(img, 0, 10000)
+    if method=='linear':
+        img = np.clip(img, 0, 10000)
+        if per_image:
+            intensity_min = np.min(img, axis=(1,2))[:, None, None]
+            intensity_max = np.max(img, axis=(1,2))[:, None, None]
+        else:
+            intensity_min = S2_min[percent]
+            intensity_max = S2_max[percent]
+            img = np.clip(img, intensity_min, intensity_max)
+        img = rescale(img, intensity_min, intensity_max)
     if method=='norm':
-        img -= S2_avg                                      # Gaussian Normalize
-        img /= S2_std
-    if method=='clip_1':
-        intensity_min, intensity_max = 0, S2_upper_1       # all season train set EO upper 1% value
-        img = np.clip(img, intensity_min, intensity_max)   # intensity clipping to a global unified MS intensity 
-        img = rescale(img, intensity_min, intensity_max)   # project to [0,1], preserve global intensities 
-    if method=='clip_2':
-        intensity_min, intensity_max = 0, S2_upper_2       # all season train set EO upper 2% value
-        img = np.clip(img, intensity_min, intensity_max)   # intensity clipping to a global unified MS intensity 
-        img = rescale(img, intensity_min, intensity_max)   # project to [0,1], preserve global intensities 
-    if method=='norm_1':
-        intensity_min, intensity_max = 0, S2_upper_1       # all season train set EO upper 1% value
-        img = np.clip(img, intensity_min, intensity_max)   # intensity clipping to a global unified MS intensity
-        img -= S2_avg_1                                    # Gaussian Normalize
-        img /= S2_std_1
-    if method=='norm_2':
-        intensity_min, intensity_max = 0, S2_upper_2       # all season train set EO upper 1% value
-        img = np.clip(img, intensity_min, intensity_max)   # intensity clipping to a global unified MS intensity
-        img -= S2_avg_2                                    # Gaussian Normalize
-        img /= S2_std_2
+        img = np.clip(img, 0, 10000)
+        if per_image:
+            intensity_min = np.min(img, axis=(1,2))[:, None, None]
+            intensity_max = np.max(img, axis=(1,2))[:, None, None]
+            img = rescale(img, intensity_min, intensity_max)
+        else:
+            intensity_min = S2_min[percent]
+            intensity_max = S2_max[percent]
+            img = np.clip(img, intensity_min, intensity_max)
+        img = (img-S2_avg[per_image][percent])/S2_std[per_image][percent]
     return img
 
-def process_SAR(img, method):
-    
-    # print('process_SAR: ', method)
-    
+def process_SAR(img, method, composite, percent=0.0, per_image=False):
     if method=='default':
         dB_min, dB_max = -25, 0                            # define a reasonable range of SAR dB
         img = np.clip(img, dB_min, dB_max)                 # intensity clipping to a global unified SAR dB range
@@ -101,40 +193,44 @@ def process_SAR(img, method):
         dB_min, dB_max = [-25.0, -32.5], [0, 0]
         img = np.concatenate([(2 * (np.clip(img[0], dB_min[0], dB_max[0]) - dB_min[0]) / (dB_max[0] - dB_min[0]))[None, ...],
                               (2 * (np.clip(img[1], dB_min[1], dB_max[1]) - dB_min[1]) / (dB_max[1] - dB_min[1]))[None, ...]], axis=0)
+    if method=='base':
+        img = np.clip(img, -50, 0)
+        img = S1_RGB_Composite(img, composite)
+    if method=='linear':
+        img = np.clip(img, -50, 0)
+        img = S1_RGB_Composite(img, composite)
+        if per_image:
+            dB_min = np.min(img, axis=(1,2))[:, None, None]
+            dB_max = np.max(img, axis=(1,2))[:, None, None]
+        else:
+            dB_min = S1_min[composite][percent]
+            dB_max = S1_max[composite][percent]
+            img = np.clip(img, dB_min, dB_max)
+        img = rescale(img, dB_min, dB_max)  
     if method=='norm':
-        img -= S1_avg
-        img /= S1_std
-    if method=='clip_1':
-        dB_min, dB_max = S1_lower_1, S1_upper_1            # all season train set SAR upper 1% value
-        img = np.clip(img, dB_min, dB_max)                 # intensity clipping to a global unified SAR dB range
-        img = rescale(img, dB_min, dB_max)                 # project to [0,1], preserve global intensities 
-    if method=='clip_2':
-        dB_min, dB_max = S1_lower_2, S1_upper_2            # all season train set SAR upper 1% value
-        img = np.clip(img, dB_min, dB_max)                 # intensity clipping to a global unified SAR dB range
-        img = rescale(img, dB_min, dB_max)                 # project to [0,1], preserve global intensities 
-    if method=='norm_1':
-        dB_min, dB_max = S1_lower_1, S1_upper_1            # all season train set SAR upper 1% value
-        img = np.clip(img, dB_min, dB_max)                 # intensity clipping to a global unified SAR dB range
-        img -= S1_avg_1
-        img /= S1_std_1
-    if method=='norm_2':
-        dB_min, dB_max = S1_lower_2, S1_upper_2            # all season train set SAR upper 1% value
-        img = np.clip(img, dB_min, dB_max)                 # intensity clipping to a global unified SAR dB range
-        img -= S1_avg_2
-        img /= S1_std_2
+        img = np.clip(img, -50, 0)
+        img = S1_RGB_Composite(img, composite)
+        if per_image:
+            dB_min = np.min(img, axis=(1,2))[:, None, None]
+            dB_max = np.max(img, axis=(1,2))[:, None, None]
+            img = rescale(img, dB_min, dB_max)  
+        else:
+            dB_min = S1_min[composite][percent]
+            dB_max = S1_max[composite][percent]
+            img = np.clip(img, dB_min, dB_max)
+        img = (img-S1_avg[per_image][composite][percent])/S1_std[per_image][composite][percent]
     return img
 
-def S1_RGB_Composite(img, method):
-    
-    # print('S1_RGB_Composite: ', method)
-    
-    if method=='mean':
+def S1_RGB_Composite(img, method):   
+    if method=='add':
         img = np.stack((img[0], img[1], (img[0]+img[1])/2.0), axis=0)
+    if method=='div':
+        img = np.stack((img[0], img[1], np.divide(img[0], img[1], out=np.zeros_like(img[0]), where=(img[1] != 0))), axis=0)
     
     return img
 
 class SEN12MSCRBase(Dataset, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', s1_rgb_composite='mean', s1_transforms=None, s2_transforms=None, Lambda=None):
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent=0.0, s1_rgb_composite='add', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
 
         self.root_dir = root   # set root directory which contains all ROI
         self.region   = region # region according to which the ROI are selected # TODO: currently only supporting 'all'
@@ -188,24 +284,12 @@ class SEN12MSCRBase(Dataset, ABC): # A : SAR / B : EO
         
         assert split in ['all', 'train', 'val', 'test', 'test_use_all'], "Input dataset must be either assigned as all, train, test, val or test,val!"
 
-        self.modalities     = ["S1", "S2"]
-        self.s1_method         = s1_rescale_method
-        self.s2_method         = s2_rescale_method
-    
-        print('#'*25)
-        print(self.root_dir)
-        print(self.region)
-        print(self.season)
-        print(self.s1_rgb_composite)
-        print(self.Lambda)
-        print(self.s1_transforms)
-        print(self.s2_transforms)
-        print(self.split)
-        print(self.s1_method)
-        print(self.s2_method)
-        print('#'*25)
-    
-    
+        self.modalities         = ["S1", "S2"]
+        self.s1_method          = s1_rescale_method
+        self.s2_method          = s2_rescale_method
+        self.cut_percent        = cut_percent
+        self.per_image          = per_image
+        
     def throw_warn(self):
         warnings.warn("""No data samples found! Please use the following directory structure:
 
@@ -247,8 +331,8 @@ class SEN12MSCRBase(Dataset, ABC): # A : SAR / B : EO
 
 
 class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', s1_rgb_composite='mean', s1_transforms=None, s2_transforms=None, Lambda=None):
-        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, s1_rgb_composite=s1_rgb_composite, s1_transforms=s1_transforms, s2_transforms=s2_transforms, Lambda=Lambda)
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent=0.0, s1_rgb_composite='mean', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
+        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, cut_percent=cut_percent, s1_rgb_composite=s1_rgb_composite, per_image=per_image, s1_transforms=s1_transforms, s2_transforms=s2_transforms, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
 
@@ -284,9 +368,10 @@ class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
         s1_tif          = read_tif(os.path.join(self.root_dir, self.paths[pdx]['S1']))
         s2_tif          = read_tif(os.path.join(self.root_dir, self.paths[pdx]['S2']))
         coord           = list(s2_tif.bounds)
-        s1              = process_SAR(read_img(s1_tif), self.s1_method)
-        s1              = S1_RGB_Composite(s1, self.s1_rgb_composite) # Add dummy third channel #TODO Find RGB Composite
-        s2              = read_img(s2_tif)[[3,2,1],:,:]
+        s1              = cut_percent(read_img(s1_tif), self.cut_percent) if self.cut_percent > 0.0 else read_img(s1_tif)
+        s2              = cut_percent(read_img(s2_tif)[[3,2,1],:,:], self.cut_percent) if self.cut_percent > 0.0 else read_img(s2_tif)[[3,2,1],:,:]
+        
+        s1              = process_SAR(s1, self.s1_method, self.s1_rgb_composite, self.cut_percent, self.per_image)
         if self.s1_transforms is not None:
             s1 = self.s1_transforms(s1)
         if self.s2_transforms is not None:
@@ -298,7 +383,7 @@ class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
                     'coord': coord,
                         },
                 'B': {
-                    'S2': process_MS(s2, self.s2_method),
+                    'S2': process_MS(s2, self.s2_method, self.cut_percent, self.per_image),
                     'S2 path': os.path.join(self.root_dir, self.paths[pdx]['S2']),
                     'coord': coord,
                         },
@@ -312,8 +397,8 @@ class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
         return self.n_samples
     
 class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', s1_rgb_composite='mean', s1_transforms=None, s2_transforms=None, Lambda=None):
-        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, s1_rgb_composite=s1_rgb_composite, s1_transforms=s1_transforms, s2_transforms=None, Lambda=Lambda)
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent=0.0, s1_rgb_composite='mean', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
+        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, cut_percent=cut_percent, s1_rgb_composite=s1_rgb_composite, per_image=per_image, s1_transforms=s1_transforms, s2_transforms=None, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
 
@@ -347,8 +432,8 @@ class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
     def __getitem__(self, pdx):  # get the triplet of patch with ID pdx
         s1_tif          = read_tif(os.path.join(self.root_dir, self.paths[pdx]['S1']))
         coord           = list(s1_tif.bounds)
-        s1              = process_SAR(read_img(s1_tif), self.s1_method)
-        s1              = S1_RGB_Composite(s1, self.s1_rgb_composite) # Add dummy third channel #TODO Find RGB Composite
+        s1              = cut_percent(read_img(s1_tif), self.cut_percent) if self.cut_percent > 0.0 else read_img(s1_tif)
+        s1              = process_SAR(s1, self.s1_method, self.s1_rgb_composite, self.cut_percent, self.per_image)
         if self.s1_transforms is not None:
             s1 = self.s1_transforms(s1)
         sample = {
@@ -365,8 +450,8 @@ class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
         return self.n_samples
     
 class SEN12MSCR_B(SEN12MSCRBase, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', s1_rgb_composite='mean', s1_transforms=None, s2_transforms=None, Lambda=None):
-        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, s1_rgb_composite=None, s1_transforms=None, s2_transforms=s2_transforms, Lambda=Lambda)
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent=0.0, s1_rgb_composite='mean', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
+        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, cut_percent=cut_percent, s1_rgb_composite=None, s1_transforms=None, per_image=per_image, s2_transforms=s2_transforms, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
 
@@ -400,11 +485,11 @@ class SEN12MSCR_B(SEN12MSCRBase, ABC): # A : SAR / B : EO
     def __getitem__(self, pdx):  # get the triplet of patch with ID pdx
         s2_tif          = read_tif(os.path.join(self.root_dir, self.paths[pdx]['S2']))
         coord           = list(s2_tif.bounds)
-        s2              = read_img(s2_tif)[[3,2,1],:,:]
+        s2              = cut_percent(read_img(s2_tif)[[3,2,1],:,:], self.cut_percent) if self.cut_percent > 0.0 else read_img(s2_tif)[[3,2,1],:,:]
         if self.s2_transforms is not None:
             s2 = self.s2_transforms(s2)
         sample = {
-                'S2': process_MS(s2, self.s2_method),
+                'S2': process_MS(s2, self.s2_method, self.cut_percent, self.per_image),
                 'S2 path': os.path.join(self.root_dir, self.paths[pdx]['S2']),
                 'coord': coord,
                     }
