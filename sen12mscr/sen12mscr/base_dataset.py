@@ -18,76 +18,76 @@ from torch.utils.data import Dataset
 S1_min      = {
     'add'   : {
         0.0: np.array([[[-25.0]], [[-25.0]], [[-25.0]]], dtype=np.float32),
-        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
     },
     'div'   : {
         0.0: np.array([[[-25.0]], [[-25.0]], [[0.0]]], dtype=np.float32),
-        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
     }
 }
 S1_max      = {
     'add'   : {
         0.0: np.array([[[0.0]], [[0.0]], [[0.0]]], dtype=np.float32),
-        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
     },
     'div'   : {
         0.0: np.array([[[0.0]], [[0.0]], [[2.0]]], dtype=np.float32),
-        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
     }
 }
 S1_avg      = {
     True:{
         'add'   : {
-            0.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+            0.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
         },
         'div'   : {
-            0.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+            0.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
         }
     }, 
     False:{
         'add'   : {
             0.0: np.array([[[-11.3838]], [[-18.1206]], [[-14.7522]]], dtype=np.float32),
-            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
         },
         'div'   : {
-            0.0: np.array([[[-11.3838]], [[-18.1206]], [[]]], dtype=np.float32),
-            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+            0.0: np.array([[[-11.3838]], [[-18.1206]], [[None]]], dtype=np.float32),
+            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
         }
     }
 }
 S1_std      = {
     True:{
         'add'   : {
-            0.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+            0.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
         },
         'div'   : {
-            0.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+            0.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
         }
     }, 
     False:{
         'add'   : {
             0.0: np.array([[[4.4542]], [[4.9335]], [[4.4379]]], dtype=np.float32),
-            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
         },
         'div'   : {
-            0.0: np.array([[[4.4542]], [[4.9335]], [[]]], dtype=np.float32),
-            1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-            2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+            0.0: np.array([[[4.4542]], [[4.9335]], [[None]]], dtype=np.float32),
+            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
         }
     }
 }
