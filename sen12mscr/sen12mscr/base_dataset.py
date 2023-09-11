@@ -59,7 +59,7 @@ S1_avg      = {
             2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
         },
         'div'   : {
-            0.0: np.array([[[-11.3838]], [[-18.1206]], [[None]]], dtype=np.float32),
+            0.0: np.array([[[-11.3838]], [[-18.1206]], [[0.6216]]], dtype=np.float32),
             1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
             2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
         }
@@ -85,7 +85,7 @@ S1_std      = {
             2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
         },
         'div'   : {
-            0.0: np.array([[[4.4542]], [[4.9335]], [[None]]], dtype=np.float32),
+            0.0: np.array([[[4.4542]], [[4.9335]], [[0.1645]]], dtype=np.float32),
             1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
             2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
         }
@@ -96,36 +96,36 @@ S1_std      = {
 # B4 / B3 / B2
 S2_min      = { 
     0.0: np.array([[[0.0]], [[0.0]], [[0.0]]], dtype=np.float32),
-    1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-    2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+    1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+    2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
 }
 S2_max      = { 
     0.0: np.array([[[4000]], [[4000]], [[4000]]], dtype=np.float32),
-    1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-    2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+    1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+    2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
 }
 S2_avg      = {
     True:{
-        0.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        0.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
     }, 
     False:{
         0.0: np.array([[[1028.1276]], [[1069.8891]], [[1167.1272]]], dtype=np.float32),
-        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
     }, 
 }
 S2_std      = {
     True:{
-        0.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        0.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
     }, 
     False:{
         0.0: np.array([[[753.9400]], [[560.4429]], [[541.1479]]], dtype=np.float32),
-        1.0: np.array([[[]], [[]], [[]]], dtype=np.float32),
-        2.0: np.array([[[]], [[]], [[]]], dtype=np.float32)
+        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
+        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
     }, 
 }
 
@@ -225,7 +225,7 @@ def S1_RGB_Composite(img, method):
     if method=='add':
         img = np.stack((img[0], img[1], (img[0]+img[1])/2.0), axis=0)
     if method=='div':
-        img = np.stack((img[0], img[1], np.divide(img[0], img[1], out=np.zeros_like(img[0]), where=(img[1] != 0))), axis=0)
+        img = np.stack((img[0], img[1], np.clip(np.divide(img[0], img[1], out=np.zeros_like(img[0]), where=(img[1] != 0)), 0.0, 2.0)), axis=0)
     
     return img
 
@@ -234,7 +234,14 @@ class SEN12MSCRBase(Dataset, ABC): # A : SAR / B : EO
 
         self.root_dir = root   # set root directory which contains all ROI
         self.region   = region # region according to which the ROI are selected # TODO: currently only supporting 'all'
-        self.season   = season # 'all', 'spring', 'summer', 'fall', 'winter'
+        
+        _season = season.split(',')
+        seasons = ['spring', 'summer', 'fall', 'winter']
+        if 'all' in _season:
+            self.season = 'all'
+        else:
+            assert not any([season not in seasons for season in _season]), "Input season must be either assigned as all, spring, summer, fall, winter, or comma separated e.g., \'spring,summer\' (no space allowed, e.g., \'spring, fall\') !"
+            self.season   = _season
         self.s1_rgb_composite = s1_rgb_composite
         self.Lambda = Lambda
         self.s1_transforms = s1_transforms
@@ -282,7 +289,7 @@ class SEN12MSCRBase(Dataset, ABC): # A : SAR / B : EO
         self.splits["test_use_all"] = self.splits["test"] + self.splits["val"]
         self.split = split
         
-        assert split in ['all', 'train', 'val', 'test', 'test_use_all'], "Input dataset must be either assigned as all, train, test, val or test,val!"
+        assert split in ['all', 'train', 'val', 'test', 'test_use_all'], "Input dataset must be either assigned as all, train, test, val or test_use_all!"
 
         self.modalities         = ["S1", "S2"]
         self.s1_method          = s1_rescale_method
@@ -346,7 +353,7 @@ class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
         paths = []
         seeds_S1 = natsorted([s1dir for s1dir in os.listdir(self.root_dir) if "_s1" in s1dir])
         if not self.season == 'all':
-            seasons = self.season.split(',')
+            seasons = self.season
             seeds_S1 = natsorted([sldir for sldir in seeds_S1 if any([season in sldir for season in seasons])])
         
         for seed in tqdm(seeds_S1):
