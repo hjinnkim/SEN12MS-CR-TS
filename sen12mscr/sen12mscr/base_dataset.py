@@ -419,7 +419,7 @@ class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
         paths = []
         seeds_S1 = natsorted([s1dir for s1dir in os.listdir(self.root_dir) if "_s1" in s1dir])
         if not self.season == 'all':
-            seasons = self.season.split(',')
+            seasons = self.season
             seeds_S1 = natsorted([sldir for sldir in seeds_S1 if any([season in sldir for season in seasons])])
         
         for seed in tqdm(seeds_S1):
@@ -472,7 +472,7 @@ class SEN12MSCR_B(SEN12MSCRBase, ABC): # A : SAR / B : EO
         paths = []
         seeds_S1 = natsorted([s1dir for s1dir in os.listdir(self.root_dir) if "_s1" in s1dir])
         if not self.season == 'all':
-            seasons = self.season.split(',')
+            seasons = self.season
             seeds_S1 = natsorted([sldir for sldir in seeds_S1 if any([season in sldir for season in seasons])])
         
         for seed in tqdm(seeds_S1):
