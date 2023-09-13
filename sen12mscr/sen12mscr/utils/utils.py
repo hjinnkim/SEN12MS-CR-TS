@@ -60,7 +60,7 @@ def get_base_transforms(load_size: int=286, img_size: int=256, rescale_method='d
 # Pix2Pix, CycleGAN
 
 
-def get_transform(opt, params=None, grayscale=False, method=InterpolationMode.BICUBIC, use_hsv_aug=False, use_gray_aug=False, use_gaussian_blur=False, kernel_size=5, rescale_method='default'):
+def get_transform(opt, params=None, grayscale=False, use_hsv_aug=False, method=InterpolationMode.BICUBIC, rescale_method='linear'):
     transform_list = [
         transforms.Lambda(lambda img: torch.Tensor(img)[None, :])
     ]
@@ -96,12 +96,8 @@ def get_transform(opt, params=None, grayscale=False, method=InterpolationMode.BI
         
     if use_hsv_aug:
         transform_list.append(transforms.RandomApply([_color_jitter], p=0.8))
-    if use_gray_aug:
-        transform_list.append(transforms.RandomGrayscale(p=0.2))
-    if use_gaussian_blur:
-        transform_list.append(transforms.GaussianBlur(kernel_size=kernel_size))
 
-    if rescale_method == 'default' or 'clip' in rescale_method:
+    if rescale_method == 'linear':
         transform_list.append(transforms.Normalize(
             mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)))
     transform_list.append(transforms.Lambda(lambda img: img.squeeze()))

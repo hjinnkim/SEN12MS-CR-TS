@@ -383,7 +383,7 @@ class SEN12MSCRBase(Dataset, ABC): # A : SAR / B : EO
 
 
 class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='mean', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='add', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
         SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, cut_percent_SAR=cut_percent_SAR, cut_percent_MS=cut_percent_MS, s1_rgb_composite=s1_rgb_composite, per_image=per_image, s1_transforms=s1_transforms, s2_transforms=s2_transforms, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
@@ -449,8 +449,8 @@ class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
         return self.n_samples
     
 class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='mean', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
-        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, cut_percent_SAR=cut_percent_SAR, cut_percent_MS=cut_percent_MS, s1_rgb_composite=s1_rgb_composite, per_image=per_image, s1_transforms=s1_transforms, s2_transforms=s2_transforms, Lambda=Lambda)
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='add', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
+        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=None, cut_percent_SAR=cut_percent_SAR, cut_percent_MS=None, s1_rgb_composite=s1_rgb_composite, per_image=per_image, s1_transforms=s1_transforms, s2_transforms=None, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
 
@@ -502,8 +502,8 @@ class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
         return self.n_samples
     
 class SEN12MSCR_B(SEN12MSCRBase, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='mean', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
-        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, cut_percent_SAR=cut_percent_SAR, cut_percent_MS=cut_percent_MS, s1_rgb_composite=s1_rgb_composite, per_image=per_image, s1_transforms=s1_transforms, s2_transforms=s2_transforms, Lambda=Lambda)
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='add', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
+        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=None, s2_rescale_method=s2_rescale_method, cut_percent_SAR=None, cut_percent_MS=cut_percent_MS, s1_rgb_composite=None, per_image=per_image, s1_transforms=None, s2_transforms=s2_transforms, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
 
