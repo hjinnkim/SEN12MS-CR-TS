@@ -18,76 +18,76 @@ from torch.utils.data import Dataset
 S1_min      = {
     'add'   : {
         0.0: np.array([[[-25.0]], [[-25.0]], [[-25.0]]], dtype=np.float32),
-        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+        1.0: np.array([[[-25.0]], [[-25.0]], [[-25.0]]], dtype=np.float32),
+        2.0: np.array([[[-25.0]], [[-25.0]], [[-25.0]]], dtype=np.float32)
     },
     'div'   : {
         0.0: np.array([[[-25.0]], [[-25.0]], [[0.0]]], dtype=np.float32),
-        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+        1.0: np.array([[[-25.0]], [[-25.0]], [[0.0]]], dtype=np.float32),
+        2.0: np.array([[[-25.0]], [[-25.0]], [[0.0]]], dtype=np.float32)
     }
 }
 S1_max      = {
     'add'   : {
         0.0: np.array([[[0.0]], [[0.0]], [[0.0]]], dtype=np.float32),
-        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+        1.0: np.array([[[0.0]], [[0.0]], [[0.0]]], dtype=np.float32),
+        2.0: np.array([[[0.0]], [[0.0]], [[0.0]]], dtype=np.float32)
     },
     'div'   : {
         0.0: np.array([[[0.0]], [[0.0]], [[2.0]]], dtype=np.float32),
-        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+        1.0: np.array([[[0.0]], [[0.0]], [[2.0]]], dtype=np.float32),
+        2.0: np.array([[[0.0]], [[0.0]], [[2.0]]], dtype=np.float32)
     }
 }
 S1_avg      = {
     True:{
         'add'   : {
-            0.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+            0.0: np.array([[[0.5449]], [[0.5074]], [[0.5087]]], dtype=np.float32),
+            1.0: np.array([[[0.5061]], [[0.5180]], [[0.5120]]], dtype=np.float32),
+            2.0: np.array([[[0.5041]], [[0.5177]], [[0.5109]]], dtype=np.float32)
         },
         'div'   : {
-            0.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+            0.0: np.array([[[0.5449]], [[0.5074]], [[0.3853]]], dtype=np.float32),
+            1.0: np.array([[[0.5061]], [[0.5180]], [[0.3796]]], dtype=np.float32),
+            2.0: np.array([[[0.5041]], [[0.5177]], [[0.5109]]], dtype=np.float32)
         }
     }, 
     False:{
         'add'   : {
             0.0: np.array([[[-11.3838]], [[-18.1206]], [[-14.7522]]], dtype=np.float32),
-            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+            1.0: np.array([[[-11.3817]], [[-18.1216]], [[-14.7517]]], dtype=np.float32),
+            2.0: np.array([[[-11.3807]], [[-18.1212]], [[-14.7509]]], dtype=np.float32)
         },
         'div'   : {
             0.0: np.array([[[-11.3838]], [[-18.1206]], [[0.6216]]], dtype=np.float32),
-            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+            1.0: np.array([[[-11.3817]], [[-18.1216]], [[0.6214]]], dtype=np.float32),
+            2.0: np.array([[[-11.3807]], [[-18.1212]], [[0.6214]]], dtype=np.float32)
         }
     }
 }
 S1_std      = {
     True:{
         'add'   : {
-            0.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+            0.0: np.array([[[0.1625]], [[0.1508]], [[0.1522]]], dtype=np.float32),
+            1.0: np.array([[[0.2209]], [[0.2200]], [[0.1944]]], dtype=np.float32),
+            2.0: np.array([[[0.2417]], [[0.2417]], [[0.2125]]], dtype=np.float32)
         },
         'div'   : {
-            0.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+            0.0: np.array([[[0.1625]], [[0.1508]], [[0.1265]]], dtype=np.float32),
+            1.0: np.array([[[0.2209]], [[0.2200]], [[0.1334]]], dtype=np.float32),
+            2.0: np.array([[[0.2417]], [[0.2417]], [[0.1391]]], dtype=np.float32)
         }
     }, 
     False:{
         'add'   : {
             0.0: np.array([[[4.4542]], [[4.9335]], [[4.4379]]], dtype=np.float32),
-            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+            1.0: np.array([[[4.4221]], [[4.8934]], [[4.4069]]], dtype=np.float32),
+            2.0: np.array([[[4.3856]], [[4.8558]], [[4.3748]]], dtype=np.float32)
         },
         'div'   : {
             0.0: np.array([[[4.4542]], [[4.9335]], [[0.1645]]], dtype=np.float32),
-            1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-            2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+            1.0: np.array([[[4.4221]], [[4.8934]], [[0.1617]]], dtype=np.float32),
+            2.0: np.array([[[4.3856]], [[4.8558]], [[0.1590]]], dtype=np.float32)
         }
     }
 }
@@ -96,36 +96,36 @@ S1_std      = {
 # B4 / B3 / B2
 S2_min      = { 
     0.0: np.array([[[0.0]], [[0.0]], [[0.0]]], dtype=np.float32),
-    1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-    2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+    1.0: np.array([[[0.0]], [[0.0]], [[0.0]]], dtype=np.float32),
+    2.0: np.array([[[0.0]], [[0.0]], [[0.0]]], dtype=np.float32)
 }
 S2_max      = { 
     0.0: np.array([[[4000]], [[4000]], [[4000]]], dtype=np.float32),
-    1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-    2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+    1.0: np.array([[[4000]], [[4000]], [[4000]]], dtype=np.float32),
+    2.0: np.array([[[4000]], [[4000]], [[4000]]], dtype=np.float32)
 }
 S2_avg      = {
     True:{
-        0.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+        0.0: np.array([[[0.2313]], [[0.2384]], [[0.2050]]], dtype=np.float32),
+        1.0: np.array([[[0.3517]], [[0.3711]], [[0.3411]]], dtype=np.float32),
+        2.0: np.array([[[0.3748]], [[0.3942]], [[0.3674]]], dtype=np.float32)
     }, 
     False:{
         0.0: np.array([[[1028.1276]], [[1069.8891]], [[1167.1272]]], dtype=np.float32),
-        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+        1.0: np.array([[[1026.1914]], [[1068.3222]], [[1165.6449]]], dtype=np.float32),
+        2.0: np.array([[[1024.5625]], [[1067.1016]], [[1164.4988]]], dtype=np.float32)
     }, 
 }
 S2_std      = {
     True:{
-        0.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+        0.0: np.array([[[0.1866]], [[0.1758]], [[0.1710]]], dtype=np.float32),
+        1.0: np.array([[[0.2472]], [[0.2382]], [[0.2381]]], dtype=np.float32),
+        2.0: np.array([[[0.3748]], [[0.3942]], [[0.3674]]], dtype=np.float32)
     }, 
     False:{
         0.0: np.array([[[753.9400]], [[560.4429]], [[541.1479]]], dtype=np.float32),
-        1.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32),
-        2.0: np.array([[[None]], [[None]], [[None]]], dtype=np.float32)
+        1.0: np.array([[[749.2563]], [[556.1748]], [[537.4968]]], dtype=np.float32),
+        2.0: np.array([[[746.4552]], [[553.8618]], [[535.6664]]], dtype=np.float32)
     }, 
 }
 
@@ -143,6 +143,50 @@ def rescale(img, oldMin, oldMax):
     oldRange = oldMax - oldMin
     img      = (img - oldMin) / oldRange
     return img
+
+def recover(img, oldMin, oldMax):
+    oldRange = oldMax - oldMin
+    img      = img * oldRange + oldMin
+    return img
+
+def recover_MS(img, method, percent=0.0, per_image=False):
+    if method=='linear':
+        img = np.clip(img, 0, 1)
+        if not per_image:
+            intensity_min  = S2_min[percent]
+            intensity_max  = S2_max[percent]
+            img = recover(img, intensity_min, intensity_max)
+    if method=='norm':
+        mean    = S2_avg[per_image][percent]
+        std     = S2_std[per_image][percent]
+        img = img * std + mean
+        if per_image:
+            img = np.clip(img, 0, 1)
+        else:
+            intensity_min = S2_min[percent]
+            intensity_max = S2_max[percent]
+            img = np.clip(img, intensity_min, intensity_max)
+        return img
+
+def recover_SAR(img, method, composite, percent=0.0, per_image=False):
+    if method=='linear':
+        img = np.clip(img, 0, 1)
+        if not per_image:
+            dB_min  = S1_min[composite][percent]
+            dB_max  = S1_max[composite][percent]
+            img = recover(img, dB_min, dB_max)
+    if method=='norm':
+        mean    = S1_avg[per_image][composite][percent]
+        std     = S1_std[per_image][composite][percent]
+        img = img * std + mean
+        if per_image:
+            img = np.clip(img, 0, 1)
+        else:
+            dB_min = S1_min[composite][percent]
+            dB_max = S1_max[composite][percent]
+            img = np.clip(img, dB_min, dB_max)
+        return img
+        
 
 def cut_percent(img, percent):
     cut_value = np.percentile(img, [percent, 100.-percent], axis=(1,2), interpolation='nearest')
@@ -230,7 +274,7 @@ def S1_RGB_Composite(img, method):
     return img
 
 class SEN12MSCRBase(Dataset, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent=0.0, s1_rgb_composite='add', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='add', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
 
         self.root_dir = root   # set root directory which contains all ROI
         self.region   = region # region according to which the ROI are selected # TODO: currently only supporting 'all'
@@ -294,7 +338,8 @@ class SEN12MSCRBase(Dataset, ABC): # A : SAR / B : EO
         self.modalities         = ["S1", "S2"]
         self.s1_method          = s1_rescale_method
         self.s2_method          = s2_rescale_method
-        self.cut_percent        = cut_percent
+        self.cut_percent_SAR    = cut_percent_SAR
+        self.cut_percent_MS     = cut_percent_MS
         self.per_image          = per_image
         
     def throw_warn(self):
@@ -338,8 +383,8 @@ class SEN12MSCRBase(Dataset, ABC): # A : SAR / B : EO
 
 
 class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent=0.0, s1_rgb_composite='mean', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
-        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, cut_percent=cut_percent, s1_rgb_composite=s1_rgb_composite, per_image=per_image, s1_transforms=s1_transforms, s2_transforms=s2_transforms, Lambda=Lambda)
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='mean', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
+        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, cut_percent_SAR=cut_percent_SAR, cut_percent_MS=cut_percent_MS, s1_rgb_composite=s1_rgb_composite, per_image=per_image, s1_transforms=s1_transforms, s2_transforms=s2_transforms, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
 
@@ -375,10 +420,10 @@ class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
         s1_tif          = read_tif(os.path.join(self.root_dir, self.paths[pdx]['S1']))
         s2_tif          = read_tif(os.path.join(self.root_dir, self.paths[pdx]['S2']))
         coord           = list(s2_tif.bounds)
-        s1              = cut_percent(read_img(s1_tif), self.cut_percent) if self.cut_percent > 0.0 else read_img(s1_tif)
-        s2              = cut_percent(read_img(s2_tif)[[3,2,1],:,:], self.cut_percent) if self.cut_percent > 0.0 else read_img(s2_tif)[[3,2,1],:,:]
+        s1              = cut_percent(read_img(s1_tif), self.cut_percent_SAR) if self.cut_percent_SAR > 0.0 else read_img(s1_tif)
+        s2              = cut_percent(read_img(s2_tif)[[3,2,1],:,:], self.cut_percent_MS) if self.cut_percent_MS > 0.0 else read_img(s2_tif)[[3,2,1],:,:]
         
-        s1              = process_SAR(s1, self.s1_method, self.s1_rgb_composite, self.cut_percent, self.per_image)
+        s1              = process_SAR(s1, self.s1_method, self.s1_rgb_composite, self.cut_percent_SAR, self.per_image)
         if self.s1_transforms is not None:
             s1 = self.s1_transforms(s1)
         if self.s2_transforms is not None:
@@ -390,7 +435,7 @@ class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
                     'coord': coord,
                         },
                 'B': {
-                    'S2': process_MS(s2, self.s2_method, self.cut_percent, self.per_image),
+                    'S2': process_MS(s2, self.s2_method, self.cut_percent_MS, self.per_image),
                     'S2 path': os.path.join(self.root_dir, self.paths[pdx]['S2']),
                     'coord': coord,
                         },
@@ -404,8 +449,8 @@ class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
         return self.n_samples
     
 class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent=0.0, s1_rgb_composite='mean', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
-        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, cut_percent=cut_percent, s1_rgb_composite=s1_rgb_composite, per_image=per_image, s1_transforms=s1_transforms, s2_transforms=None, Lambda=Lambda)
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='mean', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
+        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, cut_percent_SAR=cut_percent_SAR, cut_percent_MS=cut_percent_MS, s1_rgb_composite=s1_rgb_composite, per_image=per_image, s1_transforms=s1_transforms, s2_transforms=s2_transforms, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
 
@@ -439,8 +484,8 @@ class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
     def __getitem__(self, pdx):  # get the triplet of patch with ID pdx
         s1_tif          = read_tif(os.path.join(self.root_dir, self.paths[pdx]['S1']))
         coord           = list(s1_tif.bounds)
-        s1              = cut_percent(read_img(s1_tif), self.cut_percent) if self.cut_percent > 0.0 else read_img(s1_tif)
-        s1              = process_SAR(s1, self.s1_method, self.s1_rgb_composite, self.cut_percent, self.per_image)
+        s1              = cut_percent(read_img(s1_tif), self.cut_percent_SAR) if self.cut_percent_SAR > 0.0 else read_img(s1_tif)
+        s1              = process_SAR(s1, self.s1_method, self.s1_rgb_composite, self.cut_percent_SAR, self.per_image)
         if self.s1_transforms is not None:
             s1 = self.s1_transforms(s1)
         sample = {
@@ -457,8 +502,8 @@ class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
         return self.n_samples
     
 class SEN12MSCR_B(SEN12MSCRBase, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent=0.0, s1_rgb_composite='mean', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
-        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, cut_percent=cut_percent, s1_rgb_composite=None, s1_transforms=None, per_image=per_image, s2_transforms=s2_transforms, Lambda=Lambda)
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='mean', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
+        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, cut_percent_SAR=cut_percent_SAR, cut_percent_MS=cut_percent_MS, s1_rgb_composite=s1_rgb_composite, per_image=per_image, s1_transforms=s1_transforms, s2_transforms=s2_transforms, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
 
@@ -492,11 +537,11 @@ class SEN12MSCR_B(SEN12MSCRBase, ABC): # A : SAR / B : EO
     def __getitem__(self, pdx):  # get the triplet of patch with ID pdx
         s2_tif          = read_tif(os.path.join(self.root_dir, self.paths[pdx]['S2']))
         coord           = list(s2_tif.bounds)
-        s2              = cut_percent(read_img(s2_tif)[[3,2,1],:,:], self.cut_percent) if self.cut_percent > 0.0 else read_img(s2_tif)[[3,2,1],:,:]
+        s2              = cut_percent(read_img(s2_tif)[[3,2,1],:,:], self.cut_percent_MS) if self.cut_percent_MS > 0.0 else read_img(s2_tif)[[3,2,1],:,:]
         if self.s2_transforms is not None:
             s2 = self.s2_transforms(s2)
         sample = {
-                'S2': process_MS(s2, self.s2_method, self.cut_percent, self.per_image),
+                'S2': process_MS(s2, self.s2_method, self.cut_percent_MS, self.per_image),
                 'S2 path': os.path.join(self.root_dir, self.paths[pdx]['S2']),
                 'coord': coord,
                     }
