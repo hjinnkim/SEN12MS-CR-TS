@@ -274,7 +274,7 @@ def S1_RGB_Composite(img, method):
     return img
 
 class SEN12MSCRBase(Dataset, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='add', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='add', per_image_SAR=False, per_image_MS=False, s1_transforms=None, s2_transforms=None, Lambda=None):
 
         self.root_dir = root   # set root directory which contains all ROI
         self.region   = region # region according to which the ROI are selected # TODO: currently only supporting 'all'
@@ -340,7 +340,8 @@ class SEN12MSCRBase(Dataset, ABC): # A : SAR / B : EO
         self.s2_method          = s2_rescale_method
         self.cut_percent_SAR    = cut_percent_SAR
         self.cut_percent_MS     = cut_percent_MS
-        self.per_image          = per_image
+        self.per_image_SAR      = per_image_SAR
+        self.per_image_MS       = per_image_MS
         
     def throw_warn(self):
         warnings.warn("""No data samples found! Please use the following directory structure:
@@ -383,8 +384,8 @@ class SEN12MSCRBase(Dataset, ABC): # A : SAR / B : EO
 
 
 class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='add', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
-        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, cut_percent_SAR=cut_percent_SAR, cut_percent_MS=cut_percent_MS, s1_rgb_composite=s1_rgb_composite, per_image=per_image, s1_transforms=s1_transforms, s2_transforms=s2_transforms, Lambda=Lambda)
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='add', per_image_SAR=False, per_image_MS=False, s1_transforms=None, s2_transforms=None, Lambda=None):
+        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=s2_rescale_method, cut_percent_SAR=cut_percent_SAR, cut_percent_MS=cut_percent_MS, s1_rgb_composite=s1_rgb_composite, per_image_SAR=per_image_SAR, per_image_MS=per_image_MS, s1_transforms=s1_transforms, s2_transforms=s2_transforms, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
 
@@ -423,7 +424,7 @@ class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
         s1              = cut_percent(read_img(s1_tif), self.cut_percent_SAR) if self.cut_percent_SAR > 0.0 else read_img(s1_tif)
         s2              = cut_percent(read_img(s2_tif)[[3,2,1],:,:], self.cut_percent_MS) if self.cut_percent_MS > 0.0 else read_img(s2_tif)[[3,2,1],:,:]
         
-        s1              = process_SAR(s1, self.s1_method, self.s1_rgb_composite, self.cut_percent_SAR, self.per_image)
+        s1              = process_SAR(s1, self.s1_method, self.s1_rgb_composite, self.cut_percent_SAR, self.per_image_SAR)
         if self.s1_transforms is not None:
             s1 = self.s1_transforms(s1)
         if self.s2_transforms is not None:
@@ -435,7 +436,7 @@ class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
                     'coord': coord,
                         },
                 'B': {
-                    'S2': process_MS(s2, self.s2_method, self.cut_percent_MS, self.per_image),
+                    'S2': process_MS(s2, self.s2_method, self.cut_percent_MS, self.per_image_MS),
                     'S2 path': os.path.join(self.root_dir, self.paths[pdx]['S2']),
                     'coord': coord,
                         },
@@ -449,8 +450,8 @@ class SEN12MSCR_AB(SEN12MSCRBase, ABC): # A : SAR / B : EO
         return self.n_samples
     
 class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='add', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
-        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=None, cut_percent_SAR=cut_percent_SAR, cut_percent_MS=None, s1_rgb_composite=s1_rgb_composite, per_image=per_image, s1_transforms=s1_transforms, s2_transforms=None, Lambda=Lambda)
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='add', per_image_SAR=False, per_image_MS=False, s1_transforms=None, s2_transforms=None, Lambda=None):
+        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=s1_rescale_method, s2_rescale_method=None, cut_percent_SAR=cut_percent_SAR, cut_percent_MS=None, s1_rgb_composite=s1_rgb_composite, per_image_SAR=per_image_SAR, per_image_MS=None, s1_transforms=s1_transforms, s2_transforms=None, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
 
@@ -485,7 +486,7 @@ class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
         s1_tif          = read_tif(os.path.join(self.root_dir, self.paths[pdx]['S1']))
         coord           = list(s1_tif.bounds)
         s1              = cut_percent(read_img(s1_tif), self.cut_percent_SAR) if self.cut_percent_SAR > 0.0 else read_img(s1_tif)
-        s1              = process_SAR(s1, self.s1_method, self.s1_rgb_composite, self.cut_percent_SAR, self.per_image)
+        s1              = process_SAR(s1, self.s1_method, self.s1_rgb_composite, self.cut_percent_SAR, self.per_image_SAR)
         if self.s1_transforms is not None:
             s1 = self.s1_transforms(s1)
         sample = {
@@ -502,8 +503,8 @@ class SEN12MSCR_A(SEN12MSCRBase, ABC): # A : SAR / B : EO
         return self.n_samples
     
 class SEN12MSCR_B(SEN12MSCRBase, ABC): # A : SAR / B : EO
-    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='add', per_image=False, s1_transforms=None, s2_transforms=None, Lambda=None):
-        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=None, s2_rescale_method=s2_rescale_method, cut_percent_SAR=None, cut_percent_MS=cut_percent_MS, s1_rgb_composite=None, per_image=per_image, s1_transforms=None, s2_transforms=s2_transforms, Lambda=Lambda)
+    def __init__(self, root, split="all", region='all', season='all', s1_rescale_method='default', s2_rescale_method='default', cut_percent_SAR=0.0, cut_percent_MS=0.0, s1_rgb_composite='add', per_image_SAR=False, per_image_MS=False, s1_transforms=None, s2_transforms=None, Lambda=None):
+        SEN12MSCRBase.__init__(self, root=root, split=split, region=region, season=season, s1_rescale_method=None, s2_rescale_method=s2_rescale_method, cut_percent_SAR=None, cut_percent_MS=cut_percent_MS, s1_rgb_composite=None, per_image_SAR=None, per_image_MS=per_image_MS, s1_transforms=None, s2_transforms=s2_transforms, Lambda=Lambda)
         self.paths          = self.get_paths()
         self.n_samples      = len(self.paths)
 
@@ -541,7 +542,7 @@ class SEN12MSCR_B(SEN12MSCRBase, ABC): # A : SAR / B : EO
         if self.s2_transforms is not None:
             s2 = self.s2_transforms(s2)
         sample = {
-                'S2': process_MS(s2, self.s2_method, self.cut_percent_MS, self.per_image),
+                'S2': process_MS(s2, self.s2_method, self.cut_percent_MS, self.per_image_MS),
                 'S2 path': os.path.join(self.root_dir, self.paths[pdx]['S2']),
                 'coord': coord,
                     }
